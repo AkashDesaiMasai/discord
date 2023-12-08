@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator zod {
+  provider              = "zod-prisma"
+  output                = "./zod"
+  relationModel         = true
+  modelCase             = "camelCase"
+  modelSuffix           = "Schema"
+  useDecimalJs          = true
+  prismaJsonNullability = true
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @unique
+  name      String
+  email     String   @unique
+  imageUrl  String
+  servers   Server[]
+  members   Member[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Server {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  imageUrl   String
+  inviteCode String
+  profileId  String    @map("profileID") @db.ObjectId
+  profile    Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  members    Member[]
+  channels   Channel[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([profileId], name: "Server_ProfileId_Index")
+}
+
+enum MemberRole {
+  ADMIN
+  MODERATOR
+  GUEST
+}
+
+model Member {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  role      MemberRole @default(GUEST)
+  profileId String     @map("profileID") @db.ObjectId
+  profile   Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  serverId  String     @map("serverId") @db.ObjectId
+  server    Server     @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([profileId], name: "Member_ProfileId_Index")
+  @@index([serverId], name: "Member_ServerId_Index")
+}
+
+enum ChannelType {
+  TEXT
+  AUDIO
+  VIDEO
+}
+
+model Channel {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  type      ChannelType @default(TEXT)
+  serverId  String      @map("serverId") @db.ObjectId
+  server    Server      @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([serverId], name: "Channel_ServerId_Index")
+}
+
