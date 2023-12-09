@@ -1,4 +1,5 @@
 export * from "./profile"
+export * from "./friend"
 export * from "./server"
 export * from "./member"
 export * from "./channel"

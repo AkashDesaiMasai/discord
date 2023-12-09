@@ -1,12 +1,6 @@
 import * as z from "zod"
-
+import { MemberRole } from "@prisma/client"
 import { CompleteProfile, relatedProfileSchema, CompleteServer, relatedServerSchema } from "./index"
-
-export enum MemberRole {
-  ADMIN,
-  MODERATOR,
-  GUEST,
-}
 
 export const memberSchema = z.object({
   id: z.string(),

@@ -1,21 +1,18 @@
-import * as z from "zod";
+import * as z from "zod"
+import { ChannelType } from "@prisma/client"
+import { CompleteServer, relatedServerSchema } from "./index"
 
-import { CompleteServer, relatedServerSchema } from "./index";
-
-export enum ChannelType {
-  TEXT = "TEXT",
-  AUDIO = "AUDIO",
-  VIDEO = "VIDEO",
-}
 export const channelSchema = z.object({
   id: z.string(),
   name: z.string(),
   type: z.nativeEnum(ChannelType),
   serverId: z.string(),
-});
+  createdAt: z.date(),
+  updatedAt: z.date(),
+})
 
 export interface CompleteChannel extends z.infer<typeof channelSchema> {
-  server: CompleteServer;
+  server: CompleteServer
 }
 
 /**
@@ -23,8 +20,6 @@ export interface CompleteChannel extends z.infer<typeof channelSchema> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const relatedChannelSchema: z.ZodSchema<CompleteChannel> = z.lazy(() =>
-  channelSchema.extend({
-    server: relatedServerSchema,
-  })
-);
+export const relatedChannelSchema: z.ZodSchema<CompleteChannel> = z.lazy(() => channelSchema.extend({
+  server: relatedServerSchema,
+}))

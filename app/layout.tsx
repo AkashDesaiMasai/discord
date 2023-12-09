@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster, toast } from "sonner";
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar";
 
@@ -30,13 +30,10 @@ export default function RootLayout({
           <ClerkProvider>
             <div className="flex">
               <Navbar />
-              <main className="max-w-3xl mx-auto md:p-0 px-4 mt-4">
-                {children}
-              </main>
+              <main className="flex-1 mx-2 md:p-0 px-4 mt-4">{children}</main>
             </div>
           </ClerkProvider>
-
-          <Toaster />
+          <Toaster  richColors />
         </ThemeProvider>
       </body>
     </html>

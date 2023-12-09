@@ -1,9 +1,10 @@
 import * as z from "zod"
-import { CompleteServer, relatedServerSchema, CompleteMember, relatedMemberSchema } from "./index"
+import { CompleteServer, relatedServerSchema, CompleteMember, relatedMemberSchema, CompleteFriend, relatedFriendSchema } from "./index"
 
 export const profileSchema = z.object({
   id: z.string(),
   userId: z.string(),
+  username: z.string(),
   name: z.string(),
   email: z.string(),
   imageUrl: z.string(),
@@ -14,6 +15,8 @@ export const profileSchema = z.object({
 export interface CompleteProfile extends z.infer<typeof profileSchema> {
   servers: CompleteServer[]
   members: CompleteMember[]
+  RequestSent: CompleteFriend[]
+  FriendRequests: CompleteFriend[]
 }
 
 /**
@@ -24,4 +27,6 @@ export interface CompleteProfile extends z.infer<typeof profileSchema> {
 export const relatedProfileSchema: z.ZodSchema<CompleteProfile> = z.lazy(() => profileSchema.extend({
   servers: relatedServerSchema.array(),
   members: relatedMemberSchema.array(),
+  RequestSent: relatedFriendSchema.array(),
+  FriendRequests: relatedFriendSchema.array(),
 }))
