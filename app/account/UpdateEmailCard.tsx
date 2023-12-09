@@ -1,12 +1,10 @@
 import { AccountCard, AccountCardFooter, AccountCardBody } from "./AccountCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 export default function UpdateEmailCard({ email }: { email: string }) {
-  const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -16,10 +14,6 @@ export default function UpdateEmailCard({ email }: { email: string }) {
     const form = new FormData(target);
     const { email } = Object.fromEntries(form.entries()) as { email: string };
     if (email.length < 3) {
-      toast({
-        description: "Email must be longer than 3 characters.",
-        variant: "destructive",
-      });
       return;
     }
 
@@ -29,9 +23,7 @@ export default function UpdateEmailCard({ email }: { email: string }) {
         body: JSON.stringify({ email }),
         headers: { "Content-Type": "application/json" },
       });
-      if (res.status === 200)
-        toast({ description: "Successfully updated email!" });
-      router.refresh();
+      if (res.status === 200) router.refresh();
     });
   };
 
