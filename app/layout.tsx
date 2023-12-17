@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster, toast } from "sonner";
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,11 +30,13 @@ export default function RootLayout({
         >
           <ClerkProvider>
             <div className="flex">
-              <Navbar />
-              <main className="flex-1 mx-2 md:p-0 px-4 mt-4">{children}</main>
+              <Suspense fallback={<div className="text-5xl text-red-700">"ItsLoading"</div>}>
+                <Navbar />
+                <main className="flex-1 mx-2 md:p-0 px-4 mt-4">{children}</main>
+              </Suspense>
             </div>
           </ClerkProvider>
-          <Toaster  richColors />
+          <Toaster richColors position="bottom-center" />
         </ThemeProvider>
       </body>
     </html>

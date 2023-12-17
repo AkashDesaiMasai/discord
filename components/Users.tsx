@@ -3,14 +3,16 @@ import { MessageCircleIcon, UserPlus2Icon } from "lucide-react";
 import Image from "next/image";
 import FriendRequestButton from "./FriendRequestButton";
 import CancelFriendRequest from "./CancelFriendRequest";
+import useStore from "@/store/OnlineUser";
+import OnlineStatus from "./OnlineStatus";
 
 type Props = {
   AllUsers: Profile[];
-  type?: "friendRequestSent" | "AllUsers"|"friendRequestReceived";
+  type?: "friendRequestSent" | "AllUsers" | "friendRequestReceived";
 };
 
 const Users = ({ AllUsers, type }: Props) => {
-  console.log(AllUsers);
+
 
   if (!AllUsers || AllUsers.length === 0) {
     return (
@@ -26,7 +28,7 @@ const Users = ({ AllUsers, type }: Props) => {
   return (
     <div>
       {AllUsers.map((User: Profile) => (
-        <div key={User?.id} className="pt-2 group hover:bg-popover">
+        <div key={User?.id} className="pt-2 rounded-md group hover:bg-muted">
           <div className="flex px-4 justify-between">
             <div className="flex gap-2">
               <div className="flex items-center">
@@ -45,7 +47,12 @@ const Users = ({ AllUsers, type }: Props) => {
                     #{User?.username?.toLowerCase()}
                   </span>
                 </div>
-                <div>{type === "friendRequestSent" ? "pending..." : "offline"}</div>
+                <div>
+                  {type === "friendRequestSent"
+                    ? "pending..."
+                   
+                    : <OnlineStatus userId={User.userId}/>}
+                </div>
               </div>
             </div>
             <div className="flex flex-row items-center justify-center gap-4">

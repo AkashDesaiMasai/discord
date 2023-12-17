@@ -1,17 +1,19 @@
 import getProfile from "@/lib/auth/getProfile";
 import { auth } from "@clerk/nextjs";
 import db from "@/lib/db";
-import React from "react";
-import {
-  Dot,
-  MessageCircleIcon,
-  OptionIcon,
-  User2Icon,
-  UserPlus2Icon,
-} from "lucide-react";
+
 import Image from "next/image";
 import Users from "@/components/Users";
 import { Profile } from "@prisma/client";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const page = async () => {
   const userAuth = await auth();
@@ -40,25 +42,83 @@ const page = async () => {
   );
 
   return (
-    <div className="max-w-3xl flex flex-col gap-8 m-auto">
-      <div className="flex flex-col justify-start">
-        <div className="text-gray-400">Friend Requests Sent</div>
-        <div className="w-full border px-2  mt-2 border-b-1 border-gray-300"></div>
-        <Users AllUsers={friendrequestSent} type={"friendRequestSent"} />
-      </div>
-      <div className="flex flex-col justify-start">
-        <div className="text-gray-400">Friend Request Received</div>
-        <div className="w-full border px-2  mt-2 border-b-1 border-gray-300"></div>
-        <Users
-          AllUsers={friendrequestReceived}
-          type={"friendRequestReceived"}
-        />
-      </div>
-      <div className="flex flex-col justify-start">
-        <div className="text-gray-400">All Users</div>
-        <div className="w-full border px-2 mt-2 border-b-1 border-gray-300"></div>
-        <Users AllUsers={AllUsers} type={"AllUsers"} />
-      </div>
+    <div className="max-w-3xl flex  h-screen flex-col gap-8 m-auto">
+      <Tabs defaultValue="Online" className="w-full h-screen">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="Online">Online</TabsTrigger>
+          <TabsTrigger value="AllUsers">All Users</TabsTrigger>
+          <TabsTrigger value="Sent">Request Sent</TabsTrigger>
+          <TabsTrigger value="Received">Request Received</TabsTrigger>
+        </TabsList>
+        <TabsContent value="Online">
+          <Card>
+            <CardHeader>
+              <CardTitle>Online Users</CardTitle>
+              <CardDescription>
+               Active Users
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="space-y-1">
+                <Users AllUsers={AllUsers} type={"AllUsers"} />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="AllUsers">
+          <Card>
+            <CardHeader>
+              <CardTitle>All Users</CardTitle>
+              <CardDescription>
+                Send Friend Requests and make new friends
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="space-y-1">
+                <Users AllUsers={AllUsers} type={"AllUsers"} />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="Sent">
+          <Card>
+            <CardHeader>
+              <CardTitle>Request Sent</CardTitle>
+              <CardDescription>
+                Wait for other User to accept your Request
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="space-y-1">
+                <Users
+                  AllUsers={friendrequestSent}
+                  type={"friendRequestSent"}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="Received">
+          <Card>
+            <CardHeader>
+              <CardTitle>All Users</CardTitle>
+              <CardDescription>
+                {!!friendrequestReceived.length
+                  ? "Accept friend Request to include users in your friend list"
+                  : "No Requets!"}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="space-y-1">
+                <Users
+                  AllUsers={friendrequestReceived}
+                  type={"friendRequestReceived"}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
