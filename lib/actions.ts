@@ -81,8 +81,44 @@ export async function SendMessaage({
         },
       },
     });
-    // console.log("☀️☀️", Message);
+    
   } catch (err) {
-    console.log("☀️☀️", err);
+    console.log("[Send Message Erro", err);
+  }
+}
+export async function getMessaage({
+  Receiver,
+  conversationId,
+  message,
+}: {
+  Receiver: string;
+  conversationId: String;
+  message: { content: string; fileUrl?: string };
+}) {
+  const { content, fileUrl } = message;
+  const user = await getProfile();
+  if (!user || !conversationId) return;
+  if (user.id === Receiver) return;
+  if (!content && !fileUrl) return;
+  console.log(message);
+  try {
+    const Message = await db.directMessage.create({
+      data: {
+        content: content,
+        fileUrl,
+        conversationId: conversationId as string,
+      },
+      include: {
+        conversation: {
+          include: {
+            memberOne: true,
+            memberTwo: true,
+          },
+        },
+      },
+    });
+    
+  } catch (err) {
+    console.log("[Send Message Erro", err);
   }
 }
