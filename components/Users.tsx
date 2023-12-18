@@ -12,8 +12,6 @@ type Props = {
 };
 
 const Users = ({ AllUsers, type }: Props) => {
-
-
   if (!AllUsers || AllUsers.length === 0) {
     return (
       <div>
@@ -48,10 +46,11 @@ const Users = ({ AllUsers, type }: Props) => {
                   </span>
                 </div>
                 <div>
-                  {type === "friendRequestSent"
-                    ? "pending..."
-                   
-                    : <OnlineStatus userId={User.userId}/>}
+                  {type === "friendRequestSent" ? (
+                    "pending..."
+                  ) : (
+                    <OnlineStatus userId={User.userId} />
+                  )}
                 </div>
               </div>
             </div>

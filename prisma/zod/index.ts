@@ -1,4 +1,6 @@
 export * from "./profile"
+export * from "./conversation"
+export * from "./directmessage"
 export * from "./friend"
 export * from "./server"
 export * from "./member"

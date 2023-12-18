@@ -13,12 +13,10 @@ const SocketComp = ({ userId }: { userId: string }) => {
       },
     });
 
-    // Listen for updates on online users
     socket.on("setOnline", (onlineUserIds: string[]) => {
-      // Update the onlineUsers state based on the received user IDs
       setOnlineUsers(onlineUserIds);
     });
-    // Clean up event listeners when the component unmounts
+
     return () => {
       // Disconnect the socket when the component unmounts
       socket.disconnect();

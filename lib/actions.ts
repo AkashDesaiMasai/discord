@@ -2,6 +2,7 @@
 import { Profile } from "@prisma/client";
 import db from "./db";
 import getProfile from "./auth/getProfile";
+import { Content } from "next/font/google";
 
 export async function sendFriendRequest(userId: string) {
   const user = await getProfile();
@@ -47,4 +48,41 @@ export async function cancelFriendRequest(userId: string) {
   });
 
   return deletedFriendRequest;
+}
+
+export async function SendMessaage({
+  Receiver,
+  conversationId,
+  message,
+}: {
+  Receiver: string;
+  conversationId: String;
+  message: { content: string; fileUrl?: string };
+}) {
+  const { content, fileUrl } = message;
+  const user = await getProfile();
+  if (!user || !conversationId) return;
+  if (user.id === Receiver) return;
+  if (!content && !fileUrl) return;
+  console.log(message);
+  try {
+    const Message = await db.directMessage.create({
+      data: {
+        content: content,
+        fileUrl,
+        conversationId: conversationId as string,
+      },
+      include: {
+        conversation: {
+          include: {
+            memberOne: true,
+            memberTwo: true,
+          },
+        },
+      },
+    });
+    // console.log("☀️☀️", Message);
+  } catch (err) {
+    console.log("☀️☀️", err);
+  }
 }

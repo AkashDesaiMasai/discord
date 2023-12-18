@@ -18,29 +18,64 @@ datasource db {
 }
 
 model Profile {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId         String   @unique 
-  username       String   @unique
-  name           String
-  email          String   @unique
-  imageUrl       String
-  servers        Server[]
-  members        Member[]
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String @unique
+  username String @unique
+  name     String
+  email    String @unique
+  imageUrl String
+
+  servers Server[]
+  members Member[]
+
+  conversationsInitiated Conversation[] @relation("MemberOne")
+  conversationsReceived  Conversation[] @relation("MemberTwo")
+
   RequestSent    Friend[] @relation("requestSent")
   FriendRequests Friend[] @relation("friendRequests")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
 
+model Conversation {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  memberOneId String  @map("conversationsInitiated") @db.ObjectId
+  memberOne   Profile @relation("MemberOne", fields: [memberOneId], references: [id], onDelete: Cascade)
+
+  memberTwoId String  @map("conversationsReceived") @db.ObjectId
+  memberTwo   Profile @relation("MemberTwo", fields: [memberTwoId], references: [id], onDelete: Cascade)
+
+  directMessages DirectMessage[]
+
+  @@unique([memberOneId, memberTwoId])
+  @@index([memberTwoId])
+}
+
+model DirectMessage {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  conversationId String       @map("conversationsInitiated") @db.ObjectId
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  content        String
+  fileUrl        String?
+  deleted        Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([conversationId])
+}
+
 model Friend {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  fromProfileID  String   @map("fromProfileID") @db.ObjectId
-  RequestSent    Profile  @relation("requestSent", fields: [fromProfileID], references: [id], onDelete: Cascade)
-  toProfileID    String   @map("toProfileID") @db.ObjectId
-  friendRequests Profile  @relation("friendRequests", fields: [toProfileID], references: [id], onDelete: Cascade)
-  isAccepted     Boolean  @default(false)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  fromProfileID String  @map("fromProfileID") @db.ObjectId
+  RequestSent   Profile @relation("requestSent", fields: [fromProfileID], references: [id], onDelete: Cascade)
+
+  toProfileID    String  @map("toProfileID") @db.ObjectId
+  friendRequests Profile @relation("friendRequests", fields: [toProfileID], references: [id], onDelete: Cascade)
+
+  isAccepted Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Server {
