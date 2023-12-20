@@ -7,15 +7,15 @@ const SocketComp = ({ userId }: { userId: string }) => {
   const { setOnlineUsers } = useStore();
 
   useEffect(() => {
-    const socket = io("http://localhost:3001", {
-      query: {
-        userId: userId,
-      },
-    });
+    // const socket = io("http://localhost:3001", {
+    //   query: {
+    //     userId: userId,
+    //   },
+    // });
 
-    socket.on("setOnline", (onlineUserIds: string[]) => {
-      setOnlineUsers(onlineUserIds);
-    });
+    // socket.on("setOnline", (onlineUserIds: string[]) => {
+    //   setOnlineUsers(onlineUserIds);
+    // });
 
     return () => {
       // Disconnect the socket when the component unmounts

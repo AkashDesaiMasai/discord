@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const page = async () => {
   const userAuth = await auth();
@@ -42,31 +43,31 @@ const page = async () => {
   );
 
   return (
-    <div className="max-w-3xl flex  h-screen flex-col gap-8 m-auto">
-      <Tabs defaultValue="Online" className="w-full h-screen">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="Online">Online</TabsTrigger>
+    <div className="max-w-3xl flex truncate flex-col gap-8 m-auto">
+      <Tabs defaultValue="Online" className="w-full h-[100%]">
+        <TabsList className="grid w-full truncate grid-cols-4">
+          <TabsTrigger value="Online" >Online</TabsTrigger>
           <TabsTrigger value="AllUsers">All Users</TabsTrigger>
           <TabsTrigger value="Sent">Request Sent</TabsTrigger>
           <TabsTrigger value="Received">Request Received</TabsTrigger>
         </TabsList>
         <TabsContent value="Online">
-          <Card>
+          <Card className="h-[90vh]">
             <CardHeader>
               <CardTitle>Online Users</CardTitle>
-              <CardDescription>
-               Active Users
-              </CardDescription>
+              <CardDescription>Active Users</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="space-y-1">
-                <Users AllUsers={AllUsers} type={"AllUsers"} />
+                <ScrollArea className="h-[75vh] p-4 rounded-md border">
+                  <Users AllUsers={AllUsers} type={"AllUsers"} />{" "}
+                </ScrollArea>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="AllUsers">
-          <Card>
+          <Card className="h-[90vh]">
             <CardHeader>
               <CardTitle>All Users</CardTitle>
               <CardDescription>
@@ -75,13 +76,15 @@ const page = async () => {
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="space-y-1">
-                <Users AllUsers={AllUsers} type={"AllUsers"} />
+                <ScrollArea className="h-[75vh] p-4 rounded-md border">
+                  <Users AllUsers={AllUsers} type={"AllUsers"} />
+                </ScrollArea>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="Sent">
-          <Card>
+          <Card className="h-[90vh]">
             <CardHeader>
               <CardTitle>Request Sent</CardTitle>
               <CardDescription>
@@ -90,16 +93,18 @@ const page = async () => {
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="space-y-1">
-                <Users
-                  AllUsers={friendrequestSent}
-                  type={"friendRequestSent"}
-                />
+                <ScrollArea className="h-[75vh] p-4 rounded-md border">
+                  <Users
+                    AllUsers={friendrequestSent}
+                    type={"friendRequestSent"}
+                  />{" "}
+                </ScrollArea>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="Received">
-          <Card>
+          <Card className="h-[90vh]">
             <CardHeader>
               <CardTitle>All Users</CardTitle>
               <CardDescription>
@@ -110,10 +115,12 @@ const page = async () => {
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="space-y-1">
-                <Users
-                  AllUsers={friendrequestReceived}
-                  type={"friendRequestReceived"}
-                />
+                <ScrollArea className="h-[75vh] p-4 rounded-md border">
+                  <Users
+                    AllUsers={friendrequestReceived}
+                    type={"friendRequestReceived"}
+                  />{" "}
+                </ScrollArea>
               </div>
             </CardContent>
           </Card>

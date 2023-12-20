@@ -1,6 +1,7 @@
 import ChatHeader from "@/components/Chat/ChatHeader";
 import ChatMessages from "@/components/Chat/ChatMessage";
 import { ChatInput } from "@/components/Chat/chatInput";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { getOrCreateConversation } from "@/lib/Conversation/Conversation";
 import getProfile from "@/lib/auth/getProfile";
 import { auth } from "@clerk/nextjs";
@@ -32,13 +33,16 @@ const page = async ({ params }: ChatPageProps) => {
     Member = conversation?.memberTwo;
   }
   if (!Member || !conversation) return;
-
+  if (Member.id === user.id) {
+    notFound();
+  }
   return (
-    <div className="max-w-3xl  h-[100%] flex flex-col mx-auto">
+    <div className=" h-[100%] flex flex-col">
       <ChatHeader Profile={Member} />
-      <ChatMessages />
+      <ScrollArea className="h-[77vh]">
+        <ChatMessages paramKey="conversationId" paramValue={conversation.id} />
+      </ScrollArea>
       <ChatInput
-        apiUrl="http://localhost:3001"
         query={{
           selfId: user.id,
           userId: Member.id,

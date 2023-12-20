@@ -28,9 +28,9 @@ const SocketContext = createContext<SocketContextType>({
 
 export const useSocket = () => {
   const socket = useContext(SocketContext);
-  if (socket === undefined) {
-    throw new Error("useSocket must be used within a SocketProvider");
-  }
+  // if (socket === undefined) {
+  //   throw new Error("useSocket must be used within a SocketProvider");
+  // }
   return socket;
 };
 
@@ -64,8 +64,9 @@ export const SocketProvider =  ({
 
     setSocket(socketInstance);
     return () => {
-      socketInstance.disconnect();
+      socketInstance.disconnect().removeAllListeners();
     };
+    
   }, []);
 
   return (

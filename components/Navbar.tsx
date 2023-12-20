@@ -12,10 +12,10 @@ export default async function Navbar() {
   if (session?.user) {
     return (
       <div className="bg-popover h-[100vh]">
-        <nav className="py-2 h-[100vh] w-24 flex flex-col justify-center items-center">
-          <div className="h-12 w-12 rounded-2xl text-white bg-[#5865f2] flex justify-center items-center font-semibold hover:opacity-75 transition-hover cursor-pointer">
+        <nav className="py-4 h-[100vh] w-24 flex flex-col justify-center items-center">
+          <div className="h-16 w-16 rounded-3xl text-white bg-[#5865f2] flex justify-center items-center font-semibold hover:opacity-75 transition-hover cursor-pointer">
             <Link href="/channels/@me">
-            <Gamepad2/>
+            <Gamepad2 className="h-12 w-12"/>
             </Link>
           </div>
             {/* <SocketComp userId={session.user.id}/> */}

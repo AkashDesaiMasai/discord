@@ -1,8 +1,9 @@
 "use server";
-import { Profile } from "@prisma/client";
+import { DirectMessage, Profile } from "@prisma/client";
 import db from "./db";
 import getProfile from "./auth/getProfile";
 import { Content } from "next/font/google";
+import { QueryFunction } from "@tanstack/react-query";
 
 export async function sendFriendRequest(userId: string) {
   const user = await getProfile();
@@ -56,34 +57,34 @@ export async function SendMessaage({
   message,
 }: {
   Receiver: string;
-  conversationId: String;
-  message: { content: string; fileUrl?: string };
+  conversationId: string;
+  message: { content: string; fileUrl?: string }; // Make fileUrl optional
 }) {
   const { content, fileUrl } = message;
   const user = await getProfile();
+
   if (!user || !conversationId) return;
   if (user.id === Receiver) return;
   if (!content && !fileUrl) return;
-  console.log(message);
+
   try {
-    const Message = await db.directMessage.create({
+    const createdMessage = await db.directMessage.create({
       data: {
         content: content,
-        fileUrl,
+        senderId : user.id as string,
+        receiverId: Receiver,
         conversationId: conversationId as string,
+        fileUrl: fileUrl || "", // Provide a default value if fileUrl is undefined
       },
       include: {
-        conversation: {
-          include: {
-            memberOne: true,
-            memberTwo: true,
-          },
-        },
+        sender:true,
+        receiver:true
       },
     });
-    
+
+    console.log("Message created:", createdMessage);
   } catch (err) {
-    console.log("[Send Message Erro", err);
+    console.error("[Send Message Error]", err);
   }
 }
 export async function getMessaage({
@@ -95,11 +96,12 @@ export async function getMessaage({
   conversationId: String;
   message: { content: string; fileUrl?: string };
 }) {
-  const { content, fileUrl } = message;
+  const { content, fileUrl = "" } = message;
   const user = await getProfile();
   if (!user || !conversationId) return;
   if (user.id === Receiver) return;
   if (!content && !fileUrl) return;
+
   console.log(message);
   try {
     const Message = await db.directMessage.create({
@@ -117,7 +119,6 @@ export async function getMessaage({
         },
       },
     });
-    
   } catch (err) {
     console.log("[Send Message Erro", err);
   }

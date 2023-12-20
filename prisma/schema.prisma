@@ -28,23 +28,27 @@ model Profile {
   servers Server[]
   members Member[]
 
-  conversationsInitiated Conversation[] @relation("MemberOne")
-  conversationsReceived  Conversation[] @relation("MemberTwo")
+  directMessagesSent     DirectMessage[] @relation("sender")
+  directMessagesReceived DirectMessage[] @relation("receiver")
 
-  RequestSent    Friend[] @relation("requestSent")
-  FriendRequests Friend[] @relation("friendRequests")
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  conversationsInitiated Conversation[] @relation("memberOne")
+  conversationsReceived  Conversation[] @relation("memberTwo")
+
+  friendRequestsSent     Friend[] @relation("requestSent")
+  friendRequestsReceived Friend[] @relation("friendRequests")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Conversation {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
   memberOneId String  @map("conversationsInitiated") @db.ObjectId
-  memberOne   Profile @relation("MemberOne", fields: [memberOneId], references: [id], onDelete: Cascade)
+  memberOne   Profile @relation("memberOne", fields: [memberOneId], references: [id], onDelete: Cascade)
 
   memberTwoId String  @map("conversationsReceived") @db.ObjectId
-  memberTwo   Profile @relation("MemberTwo", fields: [memberTwoId], references: [id], onDelete: Cascade)
+  memberTwo   Profile @relation("memberTwo", fields: [memberTwoId], references: [id], onDelete: Cascade)
 
   directMessages DirectMessage[]
 
@@ -53,14 +57,22 @@ model Conversation {
 }
 
 model DirectMessage {
-  id             String       @id @default(auto()) @map("_id") @db.ObjectId
-  conversationId String       @map("conversationsInitiated") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  senderId String  @map("directMessagesSent") @db.ObjectId
+  sender   Profile @relation("sender", fields: [senderId], references: [id], onDelete: Cascade)
+
+  receiverId String  @map("directMessagesReceived") @db.ObjectId
+  receiver   Profile @relation("receiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  conversationId String       @map("directMessages") @db.ObjectId
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  content        String
-  fileUrl        String?
-  deleted        Boolean      @default(false)
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+
+  fileUrl   String @default("")
+  content   String
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([conversationId])
 }

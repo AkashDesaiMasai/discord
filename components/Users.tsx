@@ -1,10 +1,13 @@
 import { Profile } from "@prisma/client";
-import { MessageCircleIcon, UserPlus2Icon } from "lucide-react";
+import {  MessageCircleIcon, UserPlus2Icon } from "lucide-react";
 import Image from "next/image";
 import FriendRequestButton from "./FriendRequestButton";
 import CancelFriendRequest from "./CancelFriendRequest";
 import useStore from "@/store/OnlineUser";
 import OnlineStatus from "./OnlineStatus";
+import { Separator } from "./ui/separator";
+import { redirect } from "next/dist/server/api-utils";
+import Link from "next/link";
 
 type Props = {
   AllUsers: Profile[];
@@ -26,7 +29,10 @@ const Users = ({ AllUsers, type }: Props) => {
   return (
     <div>
       {AllUsers.map((User: Profile) => (
-        <div key={User?.id} className="pt-2 rounded-md group hover:bg-muted">
+        <div
+          key={User?.id}
+          className="pt-2 rounded-md group hover:bg-muted-foreground/20"
+        >
           <div className="flex px-4 justify-between">
             <div className="flex gap-2">
               <div className="flex items-center">
@@ -56,7 +62,9 @@ const Users = ({ AllUsers, type }: Props) => {
             </div>
             <div className="flex flex-row items-center justify-center gap-4">
               <div>
-                <MessageCircleIcon />
+                <Link href={`/channels/@me/${User.id}`}>
+                  <MessageCircleIcon />
+                </Link>
               </div>
               {type === "AllUsers" && (
                 <div className="flex items-center justify-center h-8 w-8 rounded-full bg-popover">
@@ -70,7 +78,7 @@ const Users = ({ AllUsers, type }: Props) => {
               )}
             </div>
           </div>
-          <div className="w-full border mt-4 border-b-1 border-gray-300"></div>
+          <Separator className="my-4" />
         </div>
       ))}
     </div>

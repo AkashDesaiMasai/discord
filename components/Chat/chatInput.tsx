@@ -17,7 +17,6 @@ import { SendMessaage } from "@/lib/actions";
 const socket = io("http://localhost:3001");
 
 interface ChatInputProps {
-  apiUrl: string;
   query: Record<string, any>;
   name: string;
   type: "conversation" | "channel";
