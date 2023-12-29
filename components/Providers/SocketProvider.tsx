@@ -64,7 +64,7 @@ export const SocketProvider =  ({
       socketInstance.disconnect().removeAllListeners();
     };
     
-  }, []);
+  }, [userId]);
 
   return (
     <SocketContext.Provider value={{ socket, isConnected, onlineUsers }}>

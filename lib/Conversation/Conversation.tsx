@@ -9,7 +9,7 @@ export const getOrCreateConversation = async (
     (await findConversation(memberTwoId, memberOneId));
 
   if (!conversation) {
-    console.error('No existing conversation found. Creating a new conversation.');
+    console.error("No existing conversation found. Creating a new conversation.");
     conversation = await createNewConversation(memberOneId, memberTwoId);
   }
 

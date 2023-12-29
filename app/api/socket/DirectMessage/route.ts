@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { DirectMessage } from "@prisma/client";
 import  ObjectId  from 'bson-objectid';
 import db from "@/lib/db";
 import { getUserAuth } from "@/lib/auth/utils";

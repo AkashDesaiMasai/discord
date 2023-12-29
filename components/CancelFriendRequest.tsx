@@ -16,10 +16,10 @@ const CancelFriendRequest = ({ Profile }: Props) => {
       onClick={async() => {
         try {
           await cancelFriendRequest(Profile.id);
-          toast.error('friendRequest Cancelled')
+          toast.error("friendRequest Cancelled")
              router.refresh();
         } catch (error) {
-            toast.error('Something went wrong!')
+            toast.error("Something went wrong!")
         }
       }}
     >
