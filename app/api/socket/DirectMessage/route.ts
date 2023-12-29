@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import ObjectId from "bson-objectid";
 import db  from "@/lib/db";
 import { getUserAuth } from "@/lib/auth/utils";
-import { DirectMessage } from "@prisma/client";
+
 
 const prisma = db;
 
@@ -26,7 +26,7 @@ export async function GET(req: Request) {
     }
 
     if (cursor === "0") {
-      let messages: DirectMessage[] = await prisma.directMessage.findMany({
+      let messages = await prisma.directMessage.findMany({
         take: MESSAGES_BATCH,
         where: {
           conversationId,
@@ -55,7 +55,7 @@ export async function GET(req: Request) {
     // If cursor is not "0," proceed with the cursor-related logic
     const cursorObjectId = cursor ? ObjectId.createFromHexString(cursor) : null;
 
-    let messages: DirectMessage[] = await prisma.directMessage.findMany({
+    let messages = await prisma.directMessage.findMany({
       take: MESSAGES_BATCH,
       skip: 1,
       cursor: cursorObjectId,
