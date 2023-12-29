@@ -41,7 +41,7 @@ const router = useRouter();
         <DialogHeader className="flex flex-col justify-center mt-4 p-4 items-center">
           <DialogTitle className="text-2xl">Leave Server</DialogTitle>
           <DialogDescription className="font-semibold">
-            Are you Sure you want to leave {server?.name}?<br /> You won't be
+            Are you Sure you want to leave {server?.name}?<br /> You won&apos;t be
             able to re-join unless you are re-invited.
           </DialogDescription>
         </DialogHeader>

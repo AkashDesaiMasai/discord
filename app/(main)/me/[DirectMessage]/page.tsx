@@ -3,7 +3,7 @@ import ChatMessages from "@/components/Chat/ChatMessage";
 import { ChatInput } from "@/components/Chat/chatInput";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getOrCreateConversation } from "@/lib/Conversation/Conversation";
-import getProfile from "@/lib/auth/getProfile";
+import {getProfile} from "@/lib/auth/getProfile";
 import { auth } from "@clerk/nextjs";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
