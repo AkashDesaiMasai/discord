@@ -44,7 +44,6 @@ const ChatMessages = ({ paramValue }: ChatMessagesProps) => {
   }
 
   return (
-   
       <div ref={chatContainerRef}>
         <div className="flex flex-col flex-1 px-3">
           <div className="flex-1"></div>

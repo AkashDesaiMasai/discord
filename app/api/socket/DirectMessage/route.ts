@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import ObjectId from "bson-objectid";
-import db  from "@/lib/db"; 
+import db  from "@/lib/db";
 import { getUserAuth } from "@/lib/auth/utils";
-import { DirectMessage } from "@/types";
+import { DirectMessage } from "@prisma/client";
 
-
+const prisma = db;
 
 const MESSAGES_BATCH = 10;
 
@@ -25,9 +25,8 @@ export async function GET(req: Request) {
       return new NextResponse("Conversation ID missing", { status: 400 });
     }
 
-    // Check if the cursor is "0" and skip cursor-related logic
     if (cursor === "0") {
-      let messages: DirectMessage[] = await db.directMessage.findMany({
+      let messages: DirectMessage[] = await prisma.directMessage.findMany({
         take: MESSAGES_BATCH,
         where: {
           conversationId,
@@ -56,7 +55,7 @@ export async function GET(req: Request) {
     // If cursor is not "0," proceed with the cursor-related logic
     const cursorObjectId = cursor ? ObjectId.createFromHexString(cursor) : null;
 
-    let messages: DirectMessage[] = await db.directMessage.findMany({
+    let messages: DirectMessage[] = await prisma.directMessage.findMany({
       take: MESSAGES_BATCH,
       skip: 1,
       cursor: cursorObjectId,

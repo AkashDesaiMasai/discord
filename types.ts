@@ -15,4 +15,6 @@ export type DirectMessage = {
   deleted: boolean;
   createdAt: Date;
   updatedAt: Date;
+  sender :Profile
+  receiver: Profile
 }

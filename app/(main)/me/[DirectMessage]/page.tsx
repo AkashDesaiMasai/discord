@@ -39,7 +39,7 @@ const page = async ({ params }: ChatPageProps) => {
   return (
     <div className=" h-[100%] flex flex-col">
       <ChatHeader Profile={Member} />
-      <ScrollArea className="max-h-[77vh]">
+      <ScrollArea className="flex-1">
         <ChatMessages paramValue={conversation.id} />
       </ScrollArea>
 
