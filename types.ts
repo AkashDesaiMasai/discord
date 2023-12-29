@@ -4,3 +4,15 @@ export type ServerWithMembersWithProfiles = Server & {
     profile: Profile;
   })[];
 };
+
+export type DirectMessage = {
+  id: string;
+  senderId: string;
+  receiverId: string;
+  conversationId: string;
+  fileUrl: string;
+  content: string;
+  deleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}

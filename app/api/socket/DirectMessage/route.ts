@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import ObjectId from "bson-objectid";
 import db  from "@/lib/db"; 
 import { getUserAuth } from "@/lib/auth/utils";
-import { DirectMessage } from "@prisma/client";
+import { DirectMessage } from "@/types";
+
+
 
 const MESSAGES_BATCH = 10;
 
