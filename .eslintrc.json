@@ -1,6 +1,6 @@
 {
   "extends": ["next/core-web-vitals"],
   "rules": {
-    "quotes": ["error", "backtick", { "allowTemplateLiterals": true }]
+    "quotes": ["error", "double", { "allowTemplateLiterals": true }]
   }
 }
