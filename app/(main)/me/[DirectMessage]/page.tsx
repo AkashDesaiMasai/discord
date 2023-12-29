@@ -39,9 +39,10 @@ const page = async ({ params }: ChatPageProps) => {
   return (
     <div className=" h-[100%] flex flex-col">
       <ChatHeader Profile={Member} />
-      <ScrollArea className="h-[77vh]">
-        <ChatMessages paramKey="conversationId" paramValue={conversation.id} />
+      <ScrollArea className="max-h-[77vh]">
+        <ChatMessages paramValue={conversation.id} />
       </ScrollArea>
+
       <ChatInput
         query={{
           selfId: user.id,

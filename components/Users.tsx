@@ -3,10 +3,9 @@ import {  MessageCircleIcon, UserPlus2Icon } from "lucide-react";
 import Image from "next/image";
 import FriendRequestButton from "./FriendRequestButton";
 import CancelFriendRequest from "./CancelFriendRequest";
-import useStore from "@/store/OnlineUser";
 import OnlineStatus from "./OnlineStatus";
 import { Separator } from "./ui/separator";
-import { redirect } from "next/dist/server/api-utils";
+
 import Link from "next/link";
 
 type Props = {
@@ -55,7 +54,7 @@ const Users = ({ AllUsers, type }: Props) => {
                   {type === "friendRequestSent" ? (
                     "pending..."
                   ) : (
-                    <OnlineStatus userId={User.userId} />
+                    <OnlineStatus userId={User.id} />
                   )}
                 </div>
               </div>

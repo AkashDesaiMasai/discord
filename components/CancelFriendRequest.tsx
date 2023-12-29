@@ -1,5 +1,5 @@
 "use client";
-import { cancelFriendRequest } from "@/lib/actions";
+import { cancelFriendRequest } from "@/lib/actions/actions";
 
 import { Profile } from "@prisma/client";
 import { CrossIcon, X } from "lucide-react";

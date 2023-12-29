@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "sonner";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ModalProvider } from "@/components/Providers/modalProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default async function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
+              <ModalProvider />
               <div className="flex">
                 <main className="flex-1">{children}</main>
               </div>

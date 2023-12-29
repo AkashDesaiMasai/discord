@@ -13,7 +13,7 @@ import { EmojiPicker } from "@/components/emoji-picker";
 
 import { io } from "socket.io-client";
 import { useSocket } from "../Providers/SocketProvider";
-import { SendMessaage } from "@/lib/actions";
+import { SendMessaage } from "@/lib/actions/actions";
 const socket = io("http://localhost:3001");
 
 interface ChatInputProps {

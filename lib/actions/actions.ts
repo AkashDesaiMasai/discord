@@ -1,9 +1,7 @@
 "use server";
-import { DirectMessage, Profile } from "@prisma/client";
-import db from "./db";
-import getProfile from "./auth/getProfile";
-import { Content } from "next/font/google";
-import { QueryFunction } from "@tanstack/react-query";
+import db from "../db";
+import getProfile from "../auth/initialProfile";
+
 
 export async function sendFriendRequest(userId: string) {
   const user = await getProfile();
@@ -19,8 +17,7 @@ export async function sendFriendRequest(userId: string) {
   });
 
   if (existingFriendRequest) {
-    // Handle case where there is already a friend request or they are already friends
-    return null;
+       return null;
   }
 
   // Create a new friend request
@@ -34,6 +31,8 @@ export async function sendFriendRequest(userId: string) {
 
   return newFriendRequest;
 }
+
+
 export async function cancelFriendRequest(userId: string) {
   const user = await getProfile();
   if (!user) return;
@@ -71,14 +70,14 @@ export async function SendMessaage({
     const createdMessage = await db.directMessage.create({
       data: {
         content: content,
-        senderId : user.id as string,
+        senderId: user.id as string,
         receiverId: Receiver,
         conversationId: conversationId as string,
         fileUrl: fileUrl || "", // Provide a default value if fileUrl is undefined
       },
       include: {
-        sender:true,
-        receiver:true
+        sender: true,
+        receiver: true,
       },
     });
 
@@ -87,39 +86,29 @@ export async function SendMessaage({
     console.error("[Send Message Error]", err);
   }
 }
-export async function getMessaage({
-  Receiver,
-  conversationId,
-  message,
-}: {
-  Receiver: string;
-  conversationId: String;
-  message: { content: string; fileUrl?: string };
-}) {
-  const { content, fileUrl = "" } = message;
+export async function getMessaage({ paramValue }: { paramValue: string }) {
   const user = await getProfile();
-  if (!user || !conversationId) return;
-  if (user.id === Receiver) return;
-  if (!content && !fileUrl) return;
+  if (!user) return;
+  const MESSAGES_BATCH = 10;
 
-  console.log(message);
   try {
-    const Message = await db.directMessage.create({
-      data: {
-        content: content,
-        fileUrl,
-        conversationId: conversationId as string,
+    const messages = await db.directMessage.findMany({
+      take: MESSAGES_BATCH,
+      where: {
+        conversationId: paramValue,
       },
       include: {
-        conversation: {
-          include: {
-            memberOne: true,
-            memberTwo: true,
-          },
-        },
+        sender: true,
+        receiver: true,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
+
+    return messages.reverse();
   } catch (err) {
     console.log("[Send Message Erro", err);
+    return null;
   }
 }

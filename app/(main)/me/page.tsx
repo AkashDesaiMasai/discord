@@ -1,4 +1,4 @@
-import getProfile from "@/lib/auth/getProfile";
+
 import { auth } from "@clerk/nextjs";
 import db from "@/lib/db";
 
@@ -15,9 +15,10 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { getProfile } from "@/lib/auth/getProfile";
 
 const page = async () => {
-  const userAuth = await auth();
+ 
   const user = await getProfile();
 
   if (!user) return;
@@ -33,7 +34,6 @@ const page = async () => {
     },
   });
 
-  // Extract Profile information from each Friend
   const friendrequestSent: Profile[] = friendsWithProfiles.flatMap((friend) =>
     friend.fromProfileID === user.id ? friend.friendRequests : []
   );
@@ -43,7 +43,7 @@ const page = async () => {
   );
 
   return (
-    <div className="max-w-3xl flex truncate flex-col gap-8 m-auto">
+    <div className=" flex truncate flex-col gap-8 m-auto">
       <Tabs defaultValue="Online" className="w-full h-[100%]">
         <TabsList className="grid w-full truncate grid-cols-4">
           <TabsTrigger value="Online" >Online</TabsTrigger>
@@ -88,7 +88,8 @@ const page = async () => {
             <CardHeader>
               <CardTitle>Request Sent</CardTitle>
               <CardDescription>
-                Wait for other User to accept your Request
+                {friendrequestSent.length?"Wait for other User to accept your Request":"No Pending Requests!"}
+                
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
@@ -106,7 +107,7 @@ const page = async () => {
         <TabsContent value="Received">
           <Card className="h-[90vh]">
             <CardHeader>
-              <CardTitle>All Users</CardTitle>
+              <CardTitle>Request Received</CardTitle>
               <CardDescription>
                 {!!friendrequestReceived.length
                   ? "Accept friend Request to include users in your friend list"

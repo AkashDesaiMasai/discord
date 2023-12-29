@@ -1,5 +1,4 @@
 "use client";
-import { getUserAuth } from "@/lib/auth/utils";
 import React, {
   createContext,
   useContext,
@@ -28,9 +27,7 @@ const SocketContext = createContext<SocketContextType>({
 
 export const useSocket = () => {
   const socket = useContext(SocketContext);
-  // if (socket === undefined) {
-  //   throw new Error("useSocket must be used within a SocketProvider");
-  // }
+  
   return socket;
 };
 

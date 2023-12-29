@@ -1,59 +1,75 @@
-
+"use client";
+import qs from "query-string";
+import { useSocket } from "@/components/Providers/SocketProvider";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
+interface ChatQueryProps {
+  queryKey: string;
+  apiUrl: string;
+  paramKey: "channelId" | "conversationId";
+  paramValue: string;
+}
 
-// interface ChatQueryProps {
-//   queryKey: string;
-//   apiUrl: string;
-//   paramKey: "channelId" | "conversationId";
-//   paramValue: string;
-// }
+export const useChatQueries = ({
+  queryKey,
+  apiUrl,
+  paramKey,
+  paramValue,
+}: ChatQueryProps) => {
+  const isConnected = useSocket();
 
-export const useChatQuery = () =>
-  // queryKey,
-  // apiUrl,
-  // paramKey,
-  // paramValue,
-  {
-   
-    const fetchProjects = async ({ pageParam }) => {
-      const res = await fetch(
-        "https://jsonplaceholder.typicode.com/posts?_limit=10&cursor=" +
-          pageParam
+  const fetchMessages = async ({ pageParam = undefined }) => {
+    try {
+      const url = qs.stringifyUrl(
+        {
+          url: apiUrl,
+          query: {
+            cursor: pageParam,
+            [paramKey]: paramValue,
+          },
+        },
+        { skipNull: true }
       );
-      return res.json();
-    };
 
-    const {
-      data,
-      error,
-      fetchNextPage,
-      hasNextPage,
-      isFetching,
-      isFetchingNextPage,
-      status,
-    } = useInfiniteQuery({
-      queryKey: ["projects"],
-      queryFn: fetchProjects,
-      initialPageParam: 0,
-      getNextPageParam: (lastPage, allPages, lastPageParam) => {
-        if (lastPage.length === 0) {
-          return undefined;
-        }
-        return lastPageParam + 1;
-      },
-      getPreviousPageParam: (firstPage, allPages, firstPageParam) => {
-        if (firstPageParam <= 1) {
-          return undefined;
-        }
-        return firstPageParam - 1;
-      },
-    });
-    return {
-      data,
-      isFetching,
-      fetchNextPage,
-      isFetchingNextPage,
-      hasNextPage,
-    };
+      const res = await fetch(url);
+
+      if (!res.ok) {
+        throw new Error(`Failed to fetch data. Status: ${res.status}`);
+      }
+
+      return res.json();
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+      throw error;
+    }
   };
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+    error,
+  } = useInfiniteQuery({
+    queryFn: fetchMessages,
+    initialPageParam: 0,
+    queryKey: [queryKey],
+    getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
+    refetchInterval: isConnected ? false : 1000,
+  });
+
+  // You can also log the error if it occurs
+  if (error) {
+    console.error("Error in useChatQueries:", error);
+  }
+
+  return {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+    error,
+  };
+};

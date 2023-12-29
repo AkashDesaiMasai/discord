@@ -19,7 +19,7 @@ const SocketComp = ({ userId }: { userId: string }) => {
 
     return () => {
       // Disconnect the socket when the component unmounts
-      socket.disconnect();
+      // socket.disconnect();
     };
   }, [userId]); // Include userId in the dependency array if you want to react to changes in userId
 
