@@ -104,7 +104,7 @@ model Server {
   updatedAt  DateTime  @updatedAt
 
   @@index([profileId], name: "Server_ProfileId_Index")
-  @@index([inviteCode])
+  @@index([inviteCode], name: "Server_InviteCode_Index")
 }
 
 enum MemberRole {

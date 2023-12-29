@@ -5,8 +5,8 @@ declare global {
   // eslint-disable-next-line no-var
   var db: PrismaClient | undefined;
 }
-
-const db = global.db || new PrismaClient({ log: ["query"] });
+// log: ["query"]
+const db = global.db || new PrismaClient();
 
 if (process.env.NODE_ENV !== "production") global.db = db;
 
