@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
-import  ObjectId  from "bson-objectid";
-import db from "@/lib/db";
+import ObjectId from "bson-objectid";
+import db  from "@/lib/db"; 
 import { getUserAuth } from "@/lib/auth/utils";
+import { DirectMessage } from "@prisma/client";
 
 const MESSAGES_BATCH = 10;
 
 export async function GET(req: Request) {
   try {
+    // Retrieve user profile
     const profile = await getUserAuth();
     const { searchParams } = new URL(req.url);
 
@@ -23,7 +25,7 @@ export async function GET(req: Request) {
 
     // Check if the cursor is "0" and skip cursor-related logic
     if (cursor === "0") {
-      let messages = await db.directMessage.findMany({
+      let messages: DirectMessage[] = await db.directMessage.findMany({
         take: MESSAGES_BATCH,
         where: {
           conversationId,
@@ -43,8 +45,6 @@ export async function GET(req: Request) {
         nextCursor = messages[MESSAGES_BATCH - 1].id;
       }
 
-
-
       return NextResponse.json({
         items: messages,
         nextCursor,
@@ -54,7 +54,7 @@ export async function GET(req: Request) {
     // If cursor is not "0," proceed with the cursor-related logic
     const cursorObjectId = cursor ? ObjectId.createFromHexString(cursor) : null;
 
-    let messages = await db.directMessage.findMany({
+    let messages: DirectMessage[] = await db.directMessage.findMany({
       take: MESSAGES_BATCH,
       skip: 1,
       cursor: cursorObjectId,
@@ -75,8 +75,6 @@ export async function GET(req: Request) {
     if (messages.length === MESSAGES_BATCH) {
       nextCursor = messages[MESSAGES_BATCH - 1].id;
     }
-
-   
 
     return NextResponse.json({
       items: messages,
