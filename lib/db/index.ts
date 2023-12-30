@@ -10,4 +10,13 @@ const db = global.db || new PrismaClient();
 
 if (process.env.NODE_ENV !== "production") global.db = db;
 
-export default db
+export default db;
+process.on("beforeExit", () => {
+  console.log("Closing Prisma Client...");
+  db.$disconnect();
+});
+
+process.on("SIGINT", () => {
+  console.log("Caught interrupt signal, disconnecting Prisma Client...");
+  db.$disconnect().finally(() => process.exit(0));
+});

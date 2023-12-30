@@ -1,4 +1,5 @@
 import { Server, Member, Profile } from "@prisma/client";
+
 export type ServerWithMembersWithProfiles = Server & {
   members: (Member & {
     profile: Profile;
@@ -15,6 +16,14 @@ export type DirectMessage = {
   deleted: boolean;
   createdAt: Date;
   updatedAt: Date;
-  sender :Profile
-  receiver: Profile
+  sender: Profile;
+  receiver: Profile;
+};
+
+export type ServerWhereUniqueInput = {
+  id?: string
 }
+
+export type ExtendedServerWhereUniqueInput = ServerWhereUniqueInput & {
+  profileId: string;
+};

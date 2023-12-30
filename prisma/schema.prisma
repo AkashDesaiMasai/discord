@@ -95,7 +95,7 @@ model Server {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
   name       String
   imageUrl   String
-  inviteCode String
+  inviteCode String    @unique
   profileId  String    @map("profileID") @db.ObjectId
   profile    Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
   members    Member[]
@@ -104,7 +104,6 @@ model Server {
   updatedAt  DateTime  @updatedAt
 
   @@index([profileId], name: "Server_ProfileId_Index")
-  @@index([inviteCode], name: "Server_InviteCode_Index")
 }
 
 enum MemberRole {
