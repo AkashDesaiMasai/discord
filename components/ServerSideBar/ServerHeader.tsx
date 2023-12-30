@@ -55,30 +55,37 @@ const ServerHeader = ({ server, Role }: serverHeaderProps) => {
           </DropdownMenuItem>
         )}
         {isAdmin && (
-          <DropdownMenuItem onClick={()=>onOpen("EditServer",{server})} className=" font-semibold focus:bg-indigo-500 focus:text-white">
+          <DropdownMenuItem
+            onClick={() => onOpen("EditServer", { server })}
+            className=" font-semibold focus:bg-indigo-500 focus:text-white"
+          >
             Server Settings
             <Settings className="h-6 w-6 ml-auto" />
           </DropdownMenuItem>
         )}
         {isAdmin && (
-          <DropdownMenuItem className=" font-semibold focus:bg-indigo-500 focus:text-white">
+          <DropdownMenuItem
+            onClick={() => onOpen("manageMembers", { server })}
+            className=" font-semibold focus:bg-indigo-500 focus:text-white"
+          >
             Manage Members
             <User className="h-6 w-6 ml-auto" />
           </DropdownMenuItem>
         )}
 
-       {isModerator&& <DropdownMenuSeparator />}
+        {isModerator && <DropdownMenuSeparator />}
         {isAdmin && (
           <DropdownMenuItem
-          onClick={()=>onOpen("deleteServer",{server})}
-           className="group text-red-500 focus:bg-red-500 focus:text-white font-semibold">
+            onClick={() => onOpen("deleteServer", { server })}
+            className="group text-red-500 focus:bg-red-500 focus:text-white font-semibold"
+          >
             Delete Server
             <Trash className="h-6 w-6 ml-auto" />
           </DropdownMenuItem>
         )}
 
         <DropdownMenuItem
-        onClick={()=>onOpen("LeaveServer",{server})}
+          onClick={() => onOpen("LeaveServer", { server })}
           disabled={isAdmin}
           className="group text-red-500 focus:bg-red-500 focus:text-white font-semibold"
         >

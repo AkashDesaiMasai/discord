@@ -61,7 +61,7 @@ const Users = ({ AllUsers, type }: Props) => {
             </div>
             <div className="flex flex-row items-center justify-center gap-4">
               <div>
-                <Link href={`/channels/@me/${User.id}`}>
+                <Link href={`/me/${User.id}`}>
                   <MessageCircleIcon />
                 </Link>
               </div>
