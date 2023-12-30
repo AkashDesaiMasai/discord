@@ -4,6 +4,11 @@ import db from "@/lib/db";
 import ServerHeader from "./ServerHeader";
 
 import { ChannelType, MemberRole } from "@prisma/client";
+import TextChannel from "./TextChannel";
+import { Separator } from "../ui/separator";
+import AudioChannel from "./AudioChannel";
+import VideoChannel from "./VidoeChannel";
+
 const ServerSideBar = async ({ serverId }: { serverId: string }) => {
   const profile = await getProfile();
   if (!profile) {
@@ -51,6 +56,10 @@ const ServerSideBar = async ({ serverId }: { serverId: string }) => {
   return (
     <div>
       <ServerHeader server={server} Role={Role} />
+      <div className="my-2"/>
+      <TextChannel channels={TextChannels}/>
+      <AudioChannel channels={AudioChannels}/>
+      <VideoChannel channels={VideoChannels}/>
     </div>
   );
 };
