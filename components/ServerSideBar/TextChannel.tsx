@@ -20,9 +20,9 @@ const TextChannel = ({ channels }: TextChannelProps) => {
           Text Channels
           <PlusCircle className="h-4 w-4 mr-2 ml-auto" />
         </AccordionTrigger>
-        <AccordionContent  className="data-[state=open] text-muted-foreground font-semibold text-sm ">
+        <AccordionContent  className="data-[state=open] text-muted-foreground font-semibold p-3 text-sm ">
           {channels.map((channel) => (
-            <div className="flex items-center hover:bg-muted-foreground/10 hover:text-primary p-3"><Hash className="h-4 w-4"/>{channel.name}</div>
+            <div className="flex items-center hover:bg-muted-foreground/10 hover:text-primary rounded-md gap-2 p-3"><Hash className="h-4 w-4"/>{channel.name}</div>
           ))}
         </AccordionContent>
       </AccordionItem>

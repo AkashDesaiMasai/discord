@@ -54,7 +54,7 @@ const ServerSideBar = async ({ serverId }: { serverId: string }) => {
   const Role = server.members.find((member)=>member.profileId===profile.id)?.role||MemberRole.GUEST
 
   return (
-    <div>
+    <div className="max-w-72">
       <ServerHeader server={server} Role={Role} />
       <div className="my-2"/>
       <TextChannel channels={TextChannels}/>
