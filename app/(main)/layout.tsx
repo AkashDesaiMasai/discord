@@ -8,12 +8,12 @@ import QueryProvider from "@/components/Providers/queryProvider";
 
 import { redirectToSignIn } from "@clerk/nextjs";
 import initialProfile from "@/lib/auth/initialProfile";
+import { FaDiscord } from "react-icons/fa";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default async function SeverLayout({
   children,
-
 }: {
   children: React.ReactNode;
   params: {
@@ -30,7 +30,13 @@ export default async function SeverLayout({
       <SocketProvider userId={profile?.id}>
         <QueryProvider>
           <div className="flex">
-            <Suspense fallback={<div className="text-5xl">Loading...</div>}>
+            <Suspense
+              fallback={
+                <div className="h-screen w-screen flex justify-center items-center">
+                  <FaDiscord className="h-48 w-48" />
+                </div>
+              }
+            >
               <Navbar />
 
               <div className="flex-1">{children}</div>

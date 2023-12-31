@@ -1,11 +1,16 @@
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "sonner";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ModalProvider } from "@/components/Providers/modalProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+import { Roboto } from "next/font/google";
+
+const roboto = Roboto({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export default async function RootLayout({
   children,
@@ -15,7 +20,7 @@ export default async function RootLayout({
   try {
     return (
       <html lang="en">
-        <body className={inter.className}>
+        <body className={roboto.className}>
           <ClerkProvider>
             <ThemeProvider
               attribute="class"
@@ -36,7 +41,7 @@ export default async function RootLayout({
     );
   } catch (error) {
     console.error("Error fetching user authentication:", error);
-    // Handle the error, redirect, or show an error page as needed
+
     return null;
   }
 }

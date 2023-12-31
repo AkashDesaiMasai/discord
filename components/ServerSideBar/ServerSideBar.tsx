@@ -4,10 +4,8 @@ import db from "@/lib/db";
 import ServerHeader from "./ServerHeader";
 
 import { ChannelType, MemberRole } from "@prisma/client";
-import TextChannel from "./TextChannel";
-import { Separator } from "../ui/separator";
-import AudioChannel from "./AudioChannel";
-import VideoChannel from "./VidoeChannel";
+import { ScrollArea } from "../ui/scroll-area";
+import ServerSection from "./ServerSection";
 
 const ServerSideBar = async ({ serverId }: { serverId: string }) => {
   const profile = await getProfile();
@@ -27,7 +25,7 @@ const ServerSideBar = async ({ serverId }: { serverId: string }) => {
       },
       members: {
         include: {
-         profile:true
+          profile: true,
         },
       },
     },
@@ -36,7 +34,6 @@ const ServerSideBar = async ({ serverId }: { serverId: string }) => {
   if (!server) {
     return redirect("/");
   }
-
 
   const TextChannels = server?.channels.filter(
     (channel) => channel.type === ChannelType.TEXT
@@ -47,19 +44,54 @@ const ServerSideBar = async ({ serverId }: { serverId: string }) => {
   const VideoChannels = server?.channels.filter(
     (channel) => channel.type === ChannelType.VIDEO
   );
-  const members = server.members.filter((member) => member.profileId !== profile.id);
+  const members = server.members.filter(
+    (member) => member.profileId !== profile.id
+  );
 
-
-
-  const Role = server.members.find((member)=>member.profileId===profile.id)?.role||MemberRole.GUEST
+  const Role =
+    server.members.find((member) => member.profileId === profile.id)?.role ||
+    MemberRole.GUEST;
 
   return (
     <div className="max-w-72">
       <ServerHeader server={server} Role={Role} />
-      <div className="my-2"/>
-      <TextChannel channels={TextChannels}/>
-      <AudioChannel channels={AudioChannels}/>
-      <VideoChannel channels={VideoChannels}/>
+      <div className="my-2" />
+      <ScrollArea className="h-[92vh] py-1">
+        {!!TextChannels.length && (
+          <ServerSection
+            label="Text Channels"
+            sectionType="channel"
+            channeltype="TEXT"
+            Role={Role}
+            data={TextChannels}
+          />
+        )}
+
+        {!!AudioChannels.length && (
+          <ServerSection
+            sectionType="channel"
+            label="Audio Channels"
+            channeltype="AUDIO"
+            Role={Role}
+            data={AudioChannels}
+          />
+        )}
+        {!!VideoChannels.length && (
+          <ServerSection
+            sectionType="channel"
+            label="Video Channels"
+            channeltype="VIDEO"
+            Role={Role}
+            data={VideoChannels}
+          />
+        )}
+        <ServerSection
+          sectionType="Member"
+          label="Members"
+          Role={Role}
+          data={members}
+        />
+      </ScrollArea>
     </div>
   );
 };

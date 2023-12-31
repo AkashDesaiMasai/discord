@@ -2,12 +2,13 @@ import { getProfile } from "@/lib/auth/getProfile";
 import { redirect } from "next/navigation";
 
 import db from "@/lib/db";
+import { redirectToSignIn } from "@clerk/nextjs";
 
 const InvitePage = async ({ params }: { params: { inviteCode: string } }) => {
   const profile = await getProfile();
 
   if (!profile) {
-    redirect("/");
+    redirectToSignIn({returnBackUrl:`/invite/${params.inviteCode}`})
     return null;
   }
 
@@ -53,7 +54,7 @@ const InvitePage = async ({ params }: { params: { inviteCode: string } }) => {
         members: true,
       },
     });
-    console.log(result, "result");
+   
     if (result) {
       redirect(`/server/${result.id}`);
     } else {

@@ -8,7 +8,7 @@ type ChatHeaderProps = {
   Profile: Profile;
 };
 const ChatHeader = ({ Profile }: ChatHeaderProps) => {
-  // console.log(Profile);
+ 
   return (
     <div className="flex  p-2 border-b-2 border-popover shadow-lg justify-between">
       <div className="flex gap-3">

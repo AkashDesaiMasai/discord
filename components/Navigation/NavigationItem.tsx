@@ -11,7 +11,7 @@ import { Separator } from "../ui/separator";
 import { ScrollArea } from "../ui/scroll-area";
 import Link from "next/link";
 import { Slack } from "lucide-react";
-
+import {FaDiscord} from"react-icons/fa"
 type NavigationItemProps = {
   servers: Server[];
 };
@@ -31,7 +31,7 @@ const NavigationItem = ({ servers }: NavigationItemProps) => {
         <ToolTip content={"Direct Messages"}>
           <div className="h-16 w-16 rounded-full hover:rounded-3xl text-white bg-[#5865f2] flex justify-center items-center font-semibold hover:opacity-75  transition-hover cursor-pointer">
             <Link href="/me">
-              <Slack className="h-8 w-8 border-none" />
+            <FaDiscord className="h-8 w-8" />
             </Link>
           </div>
         </ToolTip>

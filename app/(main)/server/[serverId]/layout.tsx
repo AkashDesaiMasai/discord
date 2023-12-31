@@ -3,6 +3,8 @@ import db from "@/lib/db";
 import { redirect } from "next/navigation";
 import ServerSideBar from "@/components/ServerSideBar/ServerSideBar";
 import { getProfile } from "@/lib/auth/getProfile";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function ServerIdLayout({
   children,
@@ -30,14 +32,22 @@ export default async function ServerIdLayout({
   });
 
   if (!server) {
-    console.log("No server again",profile.id)
+    console.log("No server again", profile.id);
     return redirect("/");
-  } 
+  }
   return (
     <div className="flex h-full">
-      <div className="hidden md:flex min-w-72 bg-muted mr-3">
-        <ServerSideBar serverId={server.id} />
-      </div>
+      <Suspense
+        fallback={
+          <div className="hidden md:flex min-w-72 bg-muted mr-3">
+            <Skeleton className="w-72 h-full" />
+          </div>
+        }
+      >
+        <div className="hidden md:flex min-w-72 bg-muted mr-3">
+          <ServerSideBar serverId={server.id} />
+        </div>
+      </Suspense>
       {children}
     </div>
   );

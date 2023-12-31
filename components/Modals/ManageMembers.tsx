@@ -6,11 +6,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Member, MemberRole } from "@prisma/client";
+import { Member, MemberRole, Profile } from "@prisma/client";
 import { UseModal } from "@/hooks/useModalStore";
 
 import {
-  Check,
   List,
   Loader2,
   Shield,
@@ -37,18 +36,35 @@ import Link from "next/link";
 import { ScrollArea } from "../ui/scroll-area";
 import { toast } from "sonner";
 import { changeRole } from "@/lib/actions/changeRole";
+import { KickUser } from "@/lib/actions/kickUser";
 
 export const ManageMembersModal = () => {
-  const { isOpen, onClose, onOpen, type, data } = UseModal();
-
-  const [isLoading, setIsloading] = useState(false);
+  const { isOpen, onClose, onOpen, type, data } = UseModal();;
   const [LoadingId, setIsloadingId] = useState("");
   const isModalOpen = isOpen && type === "manageMembers";
   const { server } = data;
 
-  const onKick = async () => {
+  const onKick = async (
+    Member: Member & {
+      profile: Profile;
+    }
+  ) => {
+    if (Member.role === "ADMIN") {
+      return;
+    }
 
+    try {
+      setIsloadingId(Member.id);
 
+      const Server = await KickUser({ Member, serverId: server?.id! });
+      toast.success(`Removed ${Member.profile.name}`);
+      onOpen("manageMembers", { server: Server });
+    } catch (error) {
+      console.log("[Kick User Erro]", error);
+      toast.error("Something went wrong");
+    } finally {
+      setIsloadingId("");
+    }
   };
 
   const onRoleChange = async (Role: MemberRole, Member: Member) => {
@@ -188,7 +204,10 @@ export const ManageMembersModal = () => {
                                   </DropdownMenuSubContent>
                                 </DropdownMenuPortal>
                               </DropdownMenuSub>
-                              <DropdownMenuItem className="text-rose-500 focus:bg-rose-700">
+                              <DropdownMenuItem
+                                onClick={() => onKick(User)}
+                                className="text-rose-500 focus:bg-rose-700"
+                              >
                                 Kick {User?.profile?.name || "User"}
                               </DropdownMenuItem>
                             </DropdownMenuContent>
