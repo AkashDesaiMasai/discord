@@ -37,7 +37,7 @@ export const SocketProvider = ({ children, userId }: SocketContextProps) => {
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
 
   useEffect(() => {
-    const socketInstance = io("http://localhost:3001", {
+    const socketInstance = io("https://discord-dun-gamma.vercel.app/", {
       query: {
         userId: userId,
       },
