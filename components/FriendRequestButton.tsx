@@ -3,7 +3,7 @@ import { Profile } from "@prisma/client";
 import db from "@/lib/db";
 import { UserPlus2Icon } from "lucide-react";
 import React from "react";
-import getProfile from "@/lib/auth/getProfile";
+import {getProfile} from "@/lib/auth/getProfile";
 import { sendFriendRequest } from "@/lib/actions/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
