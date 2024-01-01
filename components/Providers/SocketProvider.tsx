@@ -6,15 +6,16 @@ import React, {
   useState,
   useEffect,
 } from "react";
-import { io, Socket as NetSocket } from "socket.io-client";
-import { useStore } from "zustand";
+import { io, Socket } from "socket.io-client";
+
 
 interface SocketContextProps {
-  children: ReactNode,
-  userId:String
+  children: ReactNode;
+  userId: string;
 }
+
 type SocketContextType = {
-  socket: any | null;
+  socket: Socket | null;
   isConnected: boolean;
   onlineUsers: string[];
 };
@@ -25,32 +26,27 @@ const SocketContext = createContext<SocketContextType>({
   onlineUsers: [],
 });
 
-export const useSocket = () => {
+export const useSocket = (): SocketContextType => {
   const socket = useContext(SocketContext);
-  
   return socket;
 };
 
-export const SocketProvider =  ({
-  children,
-  userId
-}:  SocketContextProps) => {
-  const [socket, setSocket] = useState(null);
+export const SocketProvider = ({ children, userId }: SocketContextProps) => {
+  const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
-
-
 
   useEffect(() => {
     const socketInstance = io("http://localhost:3001", {
       query: {
-        userId:userId,
+        userId: userId,
       },
     });
 
     socketInstance.on("connect", () => {
       setIsConnected(true);
     });
+
     socketInstance.on("setOnline", (onlineUserIds: string[]) => {
       setOnlineUsers(onlineUserIds);
     });
@@ -63,7 +59,6 @@ export const SocketProvider =  ({
     return () => {
       socketInstance.disconnect().removeAllListeners();
     };
-    
   }, [userId]);
 
   return (
