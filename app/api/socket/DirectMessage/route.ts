@@ -53,12 +53,12 @@ export async function GET(req: Request) {
     }
 
     // If cursor is not "0," proceed with the cursor-related logic
-    const cursorObjectId = cursor ? ObjectId.createFromHexString(cursor) : null;
+    const cursorObjectId: ObjectId | null = cursor ? ObjectId.createFromHexString(cursor) : null;
 
     let messages = await prisma.directMessage.findMany({
       take: MESSAGES_BATCH,
       skip: 1,
-      cursor: cursorObjectId,
+      cursor: cursorObjectId !== null ? { id: cursorObjectId.toHexString() } : undefined,
       where: {
         conversationId,
       },
@@ -70,6 +70,7 @@ export async function GET(req: Request) {
         createdAt: "desc",
       },
     });
+    
 
     let nextCursor = null;
 
