@@ -5,7 +5,7 @@ type serverMembersProps = {
   member: Member & { profile: Profile };
 };
 
-const ServerMembers = ({key, member }: serverMembersProps) => {
+const ServerMembers = ({ member }: serverMembersProps) => {
   return (
     <div className="flex gap-2 items-center p-3 hover:bg-muted-foreground/10 rounded-lg">
       <Avatar>
