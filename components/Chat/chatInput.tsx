@@ -45,14 +45,14 @@ export const ChatInput = ({ query, name, type }: ChatInputProps) => {
         conversationId: query.conversationId,
         message: values,
       });
-
-      socket.emit("sendMessage", {
-        sender: query.selfId,
-        Receiver: query.userId,
-        conversationId: query.conversationId,
-        message: values,
-      });
-
+      if (socket) {
+        socket.emit("sendMessage", {
+          sender: query.selfId,
+          Receiver: query.userId,
+          conversationId: query.conversationId,
+          message: values,
+        });
+      }
       form.reset();
       router.refresh();
     } catch (error) {
