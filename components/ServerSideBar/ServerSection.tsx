@@ -20,7 +20,6 @@ import { PlusCircle } from "lucide-react";
 import ServerChannels from "./ServerChannel";
 import ServerMembers from "./ServerMembers";
 
-
 type TextChannelProps = {
   label: string;
   channeltype?: ChannelType;
@@ -60,7 +59,9 @@ const ServerSection = ({
               side="top"
             >
               <PlusCircle
-                onClick={() => onOpen("createChannel", {channelTypeData:channeltype})}
+                onClick={() =>
+                  onOpen("createChannel", { channelTypeData: channeltype })
+                }
                 className="h-4 w-4 mr-2"
               />
             </ToolTip>
@@ -70,11 +71,19 @@ const ServerSection = ({
         <AccordionContent className="data-[state=open] text-muted-foreground font-semibold px-3 text-sm ">
           {sectionType === "channel" &&
             isChannelArray(data) &&
-            data.map((channel) => <ServerChannels channel={channel} />)}
+            data.map((channel) => (
+              <div key={channel.id}>
+                <ServerChannels channel={channel} Role={Role} />
+              </div>
+            ))}
 
           {sectionType === "Member" &&
             !isChannelArray(data) &&
-            data.map((member) => <ServerMembers member={member} />)}
+            data.map((member) => (
+              <div key={member.id}>
+                <ServerMembers member={member} />
+              </div>
+            ))}
         </AccordionContent>
       </AccordionItem>
     </Accordion>

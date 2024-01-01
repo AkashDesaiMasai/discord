@@ -34,13 +34,17 @@ export const DeleteChannelModal = () => {
         serverId: params?.serverId as string,
         channelId: channel?.id!,
       });
+      if(!res){
+        throw new Error("Error Deleting Channel")
+      }
       toast.success("deletedChannel");
-      onClose();
+     
       router.refresh();
     } catch (err) {
       toast.error("something went wrong");
     } finally {
       setIsloading(false);
+      onClose();
     }
   };
 
