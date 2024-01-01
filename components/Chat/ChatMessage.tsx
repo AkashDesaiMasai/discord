@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Loader2 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { DirectMessage, Profile } from "@prisma/client";
 
 type ChatMessagesProps = {
   paramValue: string;
@@ -51,28 +52,30 @@ const ChatMessages = ({ paramValue }: ChatMessagesProps) => {
             data?.pages[0]?.items
               ?.slice()
               .reverse()
-              .map((e) => (
-                <div className="flex my-3 gap-2 " key={e.id}>
+              .map((message:DirectMessage&{
+                sender:Profile
+              }) => (
+                <div className="flex my-3 gap-2 " key={message.id}>
                   <Avatar className="h-12 w-12 mt-4 ">
-                    <AvatarImage src={e?.sender.imageUrl} alt="@shadcn" />
+                    <AvatarImage src={message?.sender.imageUrl} alt="@shadcn" />
                     <AvatarFallback>
-                      {e.sender.name
+                      {message.sender.name
                         .split(" ")
-                        .map((e) => e[0])
+                        .map((e:string) => e[0])
                         .join(" ")}
                     </AvatarFallback>
                   </Avatar>
                   <div className="text-primary m-2">
                     <div className="flex gap-2">
                       <h1 className="font-bold hover:underline ">
-                        {e.sender.name}
+                        {message.sender.name}
                       </h1>
                       <p className="text-sm font-semibold text-zinc-400 dark:text-zinc-400">
-                        {new Date(e.createdAt).toLocaleString("en-US", options)}
+                        {new Date(message.createdAt).toLocaleString("en-US", options)}
                       </p>
                     </div>
                     <p className="text-base font-semibold  text-zinc-600 dark:text-zinc-400">
-                      {e.content}
+                      {message.content}
                     </p>
                   </div>
                 </div>
